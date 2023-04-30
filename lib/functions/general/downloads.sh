@@ -5,15 +5,15 @@ function get_urls() {
 
 	case $catalog in
 		toolchain)
-			local CCODE=$(curl --silent --fail https://dl.armbian.com/geoip | jq '.continent.code' -r)
+			#local CCODE=$(curl --silent --fail https://dl.armbian.com/geoip | jq '.continent.code' -r)
 			local urls=(
-				# "https://dl.armbian.com/_toolchain/${filename}"
+				"https://dl.armbian.com/_toolchain/${filename}"
 
-				$(
-					curl --silent --fail "https://dl.armbian.com/mirrors" |
-						jq -r "(${CCODE:+.${CCODE} // } .default) | .[]" |
-						sed "s#\$#/_toolchain/${filename}#"
-				)
+				# $(
+				# 	curl --silent --fail "https://dl.armbian.com/mirrors" |
+				# 		jq -r "(${CCODE:+.${CCODE} // } .default) | .[]" |
+				# 		sed "s#\$#/_toolchain/${filename}#"
+				# )
 			)
 			;;
 
@@ -89,10 +89,7 @@ download_and_verify() {
 		ln -sf "${SRC}/config/torrents/${filename}.asc" "${localdir}/${filename}.asc"
 	else
 		# download signature file
-		aria2c "${aria2_options[@]}" \
-			--continue=false \
-			--dir="${localdir}" --out="${filename}.asc" \
-			$(get_urls "${catalog}" "${filename}.asc")
+		wget --no-check-certificate $(get_urls "${catalog}" "${filename}.asc")
 
 		local rc=$?
 		if [[ $rc -ne 0 ]]; then
@@ -110,9 +107,7 @@ download_and_verify() {
 	if [[ ${USE_TORRENT} == "yes" ]]; then
 
 		display_alert "downloading using torrent network" "$filename"
-		aria2c "${aria2_options[@]}" \
-			--follow-torrent=mem \
-			--dir="${localdir}" \
+		wget --no-check-certificate -P "${localdir}" \
 			${torrent}
 
 		[[ $? -eq 0 ]] && direct=no
@@ -122,8 +117,7 @@ download_and_verify() {
 	# direct download if torrent fails
 	if [[ $direct != "no" ]]; then
 		display_alert "downloading using http(s) network" "$filename"
-		aria2c "${aria2_options[@]}" \
-			--dir="${localdir}" --out="${filename}" \
+		wget --no-check-certificate -P "${localdir}" \
 			$(get_urls "${catalog}" "${filename}")
 
 		local rc=$?

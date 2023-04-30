@@ -109,8 +109,8 @@ function do_main_configuration() {
 			MAINLINE_FIRMWARE_SOURCE='https://mirrors.bfsu.edu.cn/git/linux-firmware.git'
 			;;
 		*)
-			MAINLINE_KERNEL_SOURCE='git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git'
-			MAINLINE_FIRMWARE_SOURCE='git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git'
+			MAINLINE_KERNEL_SOURCE='https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git'
+			MAINLINE_FIRMWARE_SOURCE='https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git'
 			;;
 	esac
 
@@ -126,7 +126,7 @@ function do_main_configuration() {
 			MAINLINE_UBOOT_SOURCE='https://github.com/u-boot/u-boot'
 			;;
 		*)
-			MAINLINE_UBOOT_SOURCE='https://source.denx.de/u-boot/u-boot.git'
+			MAINLINE_UBOOT_SOURCE='https://github.com/u-boot/u-boot'
 			;;
 	esac
 
